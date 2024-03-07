@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <main class="main">
+    <div class="container">
+      <div class="product-single-container product-single-default">
+        <div class="cart-message d-none">
+          {% include "includes/messages.html" %}
+        </div>
+
+        <div class="row">
+          <div class="col-lg-5 col-md-6 product-single-gallery">
+            <div class="product-slider-container">
+
+              <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
+                {% for i in product.photo %}
+                <div class="product-item">
+                  <img class="product-single-image" src="{{ i.files }}" data-zoom-image="assets/images/products/zoom/product-1-big.jpg" width="468" height="468" alt="product" />
+                </div>
+                {% endfor %}
+              </div>
+              <!-- End .product-single-carousel -->
+              <span class="prod-full-screen"><i class="icon-plus"></i></span>
+            </div>
+
+            <div class="prod-thumbnail owl-dots">
+              {% for i in product.photo %}
+              <div class="owl-dot">
+                <img src="{{ i.files }}" width="110" height="110" alt="product-thumbnail" />
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          <!-- End .product-single-gallery -->
+
+          <div class="col-lg-7 col-md-6 product-single-details">
+            <h1 class="product-title">{{ product.title }}</h1>
+
+            
+
+            <div class="ratings-container">
+              <div class="product-ratings">
+                <span class="ratings" style="width:60%"></span>
+                <!-- End .ratings -->
+                <span class="tooltiptext tooltip-top"></span>
+              </div>
+              <!-- End .product-ratings -->
+
+              <a href="#" class="rating-link">( 6 Reviews )</a>
+            </div>
+            <!-- End .ratings-container -->
+
+            <hr class="short-divider" />
+
+            <div class="price-box">
+              <span class="new-price">Rs. {{ product.price }}</span>
+            </div>
+            <!-- End .price-box -->
+
+            <div class="product-desc">
+              <p>
+                {{ product.description }}
+              </p>
+            </div>
+            <!-- End .product-desc -->
+
+            <ul class="single-info-list">
+              <li>
+                SKU: <strong>654613612</strong>
+              </li>
+
+              <li>
+                CATEGORY: <strong><a href="#" class="product-category">{{ product.subcategory.title }}</a></strong>
+              </li>
+
+              <li>
+                TAGs: <strong><a href="#" class="product-category">{{ product.subcategory.category.title }}</a></strong>,
+                <strong><a href="#" class="product-category">{{ product.subcategory.title }}</a></strong>
+              </li>
+            </ul>
+            {% if user.id is not None %}
+            <form method="post" action='{% url 'add_to_cart' %}'>
+            {% csrf_token %}
+            <div class="product-action">
+              <div class="product-single-qty">
+                <input type="hidden" name="product_id" value={{ product.id }}>
+                <input class="horizontal-quantity form-control" name="quantity" type="text" />
+              </div>
+              <button class="btn btn-success" type="submit">Add to Cart</button>
+            </div>
+            </form>
+            {% else %}
+            <div class="product-action">
+              <div class="product-single-qty">
+                <input type="hidden" name="product_id" value={{ product.id }}>
+                <input class="horizontal-quantity form-control" name="quantity" type="text" disabled />
+              </div>
+              <button class="btn btn-success" type="submit" disabled>Add to Cart</button>
+              <p>Your are not logged in to your account. Login to add product <a href="{% url 'login_page' %}">click to login</a></p>
+            </div>
+            {% endif %}
+
+            <!-- End .product-action -->
+
+            <hr class="divider mb-0 mt-0" />
+
+            <div class="product-single-share mb-3">
+
+            </div>
+            <!-- End .product single-share -->
+          </div>
+          <!-- End .product-single-details -->
+        </div>
+        <!-- End .row -->
+      </div>
+      <!-- End .product-single-container -->
+    </div>
+    <!-- End .container -->
+  </main>
+{% endblock %}

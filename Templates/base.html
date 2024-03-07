@@ -1,0 +1,182 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>EComm</title>
+
+    <meta name="keywords" content="HTML5 Template" />
+    <meta name="description" content="Porto">
+    <meta name="author" content="SW-THEMES">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/icons/favicon.png' %}">
+
+
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="{% static 'assets/css/demo4.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}">
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <header class="header">
+
+            <div class="header-middle sticky-header" data-sticky-options="{'mobile': true}">
+                <div class="container">
+                    <div class="header-left col-lg-2 w-auto pl-0">
+                        <button class="mobile-menu-toggler text-primary mr-2" type="button">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <a href="{% url 'home' %}" class="logo">
+                            <img src="{% static 'assets/images/logo.png' %}" width="111" height="44" alt="Porto Logo">
+                        </a>
+                    </div>
+
+                    {% if user.id is not None %}
+
+                    <a href="{% url 'do_logout' %}" class="header-icon" title="logout"><i class="icon-user-2"></i> {{ user.first_name }} LogOut</a>
+
+                    <a href="{% url 'view_history' %}" class="header-icon" title="View cart">History</a>
+
+                    <a href="{% url 'view_cart' %}" class="header-icon" title="View cart"><i class="icon-wishlist-2"></i></a>
+
+
+                    {% else %}
+
+                    <a href="{% url 'login_page' %}" class="header-icon" title="login"><i class="icon-user-2"></i></a>
+
+                    {% endif %}
+                </div>
+            </div>
+    </div>
+
+    <div class="header-bottom sticky-header d-none d-lg-block" data-sticky-options="{'mobile': false}">
+        <div class="container">
+            <nav class="main-nav w-100">
+                <ul class="menu">
+                    <li class="active">
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    {% for i in category %}
+                    <li>
+                        <a href="">{{ i.title }}</a>
+                        <div class="megamenu">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    {% for j in subcategory %}
+                                    {% if j.category.id == i.id %}
+                                    <ul class="submenu">
+                                        <li><a href="{% url 'view_product_by_category' j.id %}">{{ j.title }}</a></li>
+                                    </ul>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    </header>
+    {% block content %}
+
+
+
+    {% endblock %}
+    <footer class="footer bg-dark">
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="widget">
+                            <h4 class="widget-title">Contact Info</h4>
+                            <ul class="contact-info">
+                                <li>
+                                    <span class="contact-info-label">Address:</span>123 Street Name, City, England
+                                </li>
+                                <li>
+                                    <span class="contact-info-label">Phone:</span><a href="tel:">(123)
+                                        456-7890</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- End .widget -->
+                    </div>
+                    <!-- End .col-lg-3 -->
+                </div>
+                <!-- End .row -->
+            </div>
+            <!-- End .container -->
+        </div>
+        <!-- End .footer-middle -->
+
+        <div class="container">
+            <div class="footer-bottom">
+                <div class="container d-sm-flex align-items-center">
+                    <div class="footer-left">
+                        <span class="footer-copyright">© eCommerce. 2024. All Rights Reserved</span>
+                    </div>
+
+                    <div class="footer-right ml-auto mt-1 mt-sm-0">
+                        <div class="payment-icons">
+                            <span class="payment-icon visa"
+                                style="background-image: url(assets/images/payments/payment-visa.svg)"></span>
+                            <span class="payment-icon paypal"
+                                style="background-image: url(assets/images/payments/payment-paypal.svg)"></span>
+                            <span class="payment-icon stripe"
+                                style="background-image: url(assets/images/payments/payment-stripe.png)"></span>
+                            <span class="payment-icon verisign"
+                                style="background-image:  url(assets/images/payments/payment-verisign.svg)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End .footer-bottom -->
+        </div>
+        <!-- End .container -->
+    </footer>
+    <!-- End .footer -->
+    </div>
+    <!-- End .page-wrapper -->
+
+    <div class="loading-overlay">
+        <div class="bounce-loader">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+
+    <!-- End .newsletter-popup -->
+
+    <a id="scroll-top" href="#top" title="Top" role="button"><i class="icon-angle-up"></i></a>
+
+    <!-- Plugins JS File -->
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/optional/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.appear.min.js' %}"></script>
+
+    <!-- Main JS File -->
+    <script src="{% static 'assets/js/main.min.js' %}"></script>
+</body>
+
+
+<!-- Mirrored from portotheme.com/html/porto_ecommerce/demo4.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 23 Jan 2024 11:23:58 GMT -->
+
+</html>

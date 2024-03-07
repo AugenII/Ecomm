@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 bg-light">
+  <h2 class="section-title heading-border ls-20 border-0">View History</h2>
+      {% include 'includes/messages.html' %}
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Buyer</th>
+                <th scope="col">Date</th>
+                <th scope="col">Item</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in history %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td scope="row">{{ user.first_name }}</td>
+                  <td>{{ i.date_added }}</td>
+                  <td>{{ i.product.title }}</td>
+                  <td>{{ i.quantity }} Nos.</td>
+                  <td>Rs. {{ i.total_amount }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+function calculateRemainingDays(returnDate){
+  const currentDate=new Date();
+  const returnDateObj = new Date(returnDate);
+  const timeDiff = returnDate.obj.getTime() - currentDate.getTime();
+  const remainingDays = Math.ceil(timeDiff/(1000*360*24));
+
+  return remainingDays
+}
+
+function returnItem(productTitle, returnDate){
+  const remainingDays = calculateRemainingDays(returnDate);
+  alert('You have ${remainingDays} days left to return the product "${productTitle}"')
+}
+    </script>
+
+    {% endblock %}

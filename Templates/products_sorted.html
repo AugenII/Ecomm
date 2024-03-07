@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <section class="featured-products-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          {% if products %}
+            <h2 class="section-title heading-border ls-20 border-0">All Products</h2>
+            <div class="row">
+              {% for i in products %}
+                <div class="col-3">
+                  <div class="card" style="width: 18rem;">
+                    {% for j in i.photo %}
+                      {% if forloop.first %}
+                        <img src="{{ j.files }}" height="250" class="card-img-top" alt="..." />
+                      {% endif %}
+                    {% endfor %}
+                    <div class="card-body">
+                      <h5 class="card-title">{{ i.title }}</h5>
+                      <p class="card-text">{{ i.manufacturer.name }}</p>
+                      <p class="card-text">
+                        <strong>Rs. {{ i.price }}</strong>
+                      </p>
+                      <a href="{% url 'view_product' i.id %}" class="btn btn-primary">View More..</a>
+                    </div>
+                  </div>
+                  <br />
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <h2 class="section-title heading-border ls-20 border-0">Filtered Products</h2>
+            <div class="row">
+              <div class="col-3">No Products Found...</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <!-- End .featured-proucts -->
+    </div>
+  </section>
+{% endblock %}

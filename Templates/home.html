@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<main class="main">
+    <div class="home-slider slide-animate owl-carousel owl-theme show-nav-hover nav-big mb-2 text-uppercase"
+        data-owl-options="{
+      'loop': false
+    }">
+        <div class="home-slide home-slide1 banner">
+            <img class="slide-bg" src="{% static 'banner3.jpg' %}" height="50" width="50" alt="slider image">
+            <div class="container d-flex align-items-center">
+                <div class="banner-layer appear-animate" data-animation-name="fadeInUpShorter">
+                    <h4 class="text-transform-none m-b-3">Find the Boundaries. Push Through!</h4>
+                    <h2 class="text-transform-none mb-0">New Year Sale</h2>
+                    <h3 class="m-b-3">New Stocks</h3>
+                </div>
+                <!-- End .banner-layer -->
+            </div>
+        </div>
+        <!-- End .home-slide -->
+    </div>
+    <!-- End .home-slider -->
+
+    <div class="container">
+        <div class="info-boxes-slider owl-carousel owl-theme mb-2" data-owl-options="{
+        'dots': false,
+        'loop': false,
+        'responsive': {
+          '576': {
+            'items': 2
+          },
+          '992': {
+            'items': 3
+          }
+        }
+      }">
+            <div class="info-box info-box-icon-left">
+                <i class="icon-shipping"></i>
+
+                <div class="info-box-content">
+                    <h4>FREE SHIPPING &amp; RETURN</h4>
+                    <p class="text-body">Free shipping on all orders over $99.</p>
+                </div>
+                <!-- End .info-box-content -->
+            </div>
+            <!-- End .info-box -->
+
+            <div class="info-box info-box-icon-left">
+                <i class="icon-money"></i>
+
+                <div class="info-box-content">
+                    <h4>MONEY BACK GUARANTEE</h4>
+                    <p class="text-body">100% money back guarantee</p>
+                </div>
+                <!-- End .info-box-content -->
+            </div>
+            <!-- End .info-box -->
+
+            <div class="info-box info-box-icon-left">
+                <i class="icon-support"></i>
+
+                <div class="info-box-content">
+                    <h4>ONLINE SUPPORT 24/7</h4>
+                    <p class="text-body">Lorem ipsum dolor sit amet.</p>
+                </div>
+                <!-- End .info-box-content -->
+            </div>
+            <!-- End .info-box -->
+        </div>
+    </div>
+    <!-- End .container -->
+
+    <section class="featured-products-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-2">
+                    <p style="text-align: center;">
+                        <strong>Apply Filters</strong>
+                    </p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <p>Choose Category</p>
+                        {% for i in subcategory %}
+                        <ul>
+                            <input class="form-check-input" type="checkbox" name="subcat_id" value="{{ i.id }}"
+                                id="flexCheckDefault" />
+                            <label class="form-check-label" for="flexCheckDefault">&nbsp;{{ i.title }}</label>
+                        </ul>
+                        {% endfor %}
+                        <br />
+                        <p>Choose Brands</p>
+                        {% for i in manufacturer %}
+                        <ul>
+                            <input class="form-check-input" type="checkbox" name="man_id" value="{{ i.id }}"
+                                id="flexCheckDefault" />
+                            <label class="form-check-label" for="flexCheckDefault">&nbsp;{{ i.name }}</label>
+                        </ul>
+                        {% endfor %}
+                        <br />
+                        <label for="customRange2" class="form-label">Price Range</label>
+                        <br />
+                        Rs.
+                        <span id="priceValue">0</span> /-
+                        <br />
+                        <input type="range" class="form-range" name="price_range" min="0" max="200000" value="0"
+                            id="customRange2" />
+                        <br />
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="col-10">
+                    {% if filtered_products_list %}
+                    <h2 class="section-title heading-border ls-20 border-0">Filtered Products</h2>
+                    <div class="row">
+                        {% for i in filtered_products_list %}
+                        <div class="col-3">
+                            <div class="card" style="width: 18rem;">
+                                {% for j in photo %}
+                                {% if j.product.id == i.id %}
+                                {% if forloop.first %}
+                                <img src="{{ j.files.url }}" height="1" class="card-img-top" alt="..." />
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ i.title }}</h5>
+                                    <p class="card-text">{{ i.manufacturer.name }}</p>
+                                    <p class="card-text"><strong>Rs. {{ i.price }}</strong></p>
+                                    <a href="{% url 'view_product' i.id %}" class="btn btn-primary">View More</a>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% elif products_list %}
+                    <h2 class="section-title heading-border ls-20 border-0">All Products</h2>
+                    <div class="row">
+                        {% for i in products_list %}
+                        <div class="col-3">
+                            <div class="card" style="width: 22rem;">
+                                {% for j in photo %}
+                                {% if j.product.id == i.id %}
+                                {% if forloop.first %}
+                                <img src="{{ j.files.url }}" height="15px"  class="card-img-top" alt="..." />
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ i.title }}</h5>
+                                    <p class="card-text">{{ i.manufacturer.name }}</p>
+                                    <p class="card-text"><strong>Rs. {{ i.price }}</strong></p>
+                                    <a href="{% url 'view_product' i.id %}" class="btn btn-primary">View More..</a>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <h2 class="section-title heading-border ls-20 border-0">Filtered Products</h2>
+                    <div class="row">
+                        <div class="col-3">No Products Found...</div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+            <!-- End .featured-proucts -->
+        </div>
+    </section>
+</main>
+
+<script>
+    // Get the range input and the element to display the current value
+    var rangeInput = document.getElementById('customRange2')
+    var priceValue = document.getElementById('priceValue')
+
+    // Update the value when the slider changes
+    rangeInput.addEventListener('input', function () {
+        priceValue.textContent = rangeInput.value
+    })
+</script>
+<!-- End .main -->
+{% endblock %}

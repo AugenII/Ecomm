@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 bg-light">
+      {% include 'includes/messages.html' %}
+      {% if cart_data %}
+      <h2 class="section-title heading-border ls-20 border-0">View Cart</h2>
+      <div class="row">
+        <div class="col-9">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">#</th>
+                <th scope="col">Buyer</th>
+                <th scope="col">Date</th>
+                <th scope="col">Item</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <form method="post" action="{% url 'confirm_order'  %}">
+              {% csrf_token %}
+              {% for i in cart_data %}
+                <tr>
+                  <td><input type="checkbox" name="orders[]" value={{ i.id }} required></td>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td scope="row">{{ user.first_name }}</td>
+                  <td>{{ i.date_added }}</td>
+                  <td>{{ i.product.title }}</td>
+                  <td>{{ i.quantity }} Nos.</td>
+                  <td>Rs. {{ i.total_amount }}</td>
+                  <td>
+                    <a href="{% url 'remove_cart' i.id %}" class="btn  btn-outline-danger">Remove Item</a>
+                  </td>
+                </tr>
+              {% endfor %}
+                <tr>
+                  <td colspan="8">
+                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal">
+                      Proceed to Checkout
+                    </button>
+                  </td>
+                </tr>
+                <div class="modal" id="myModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Choose Delivery Address</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <div class="modal-body">
+                        {% for i in address %}
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">
+                              <input type="radio" name="address_id" value="{{ i.id }}" aria-label="Radio button for following text input" required />
+                            </div>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Text input with radio button" value="{{ i.title }},{{ i.landmark }},{{ i.pincode }} - {{ i.type }}" readonly />
+                        </div>
+                        {% endfor %}
+                        <br>
+                        <button class="btn btn-success" type="submit">Confirm</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </tbody>
+          </table>
+        </div>
+        <div class ="col-3">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="row">Cart Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Total : Rs. {{ cart_total }}</strong>
+                <p>GST : 18 %</p>
+                <p>GST Amount : {{ gst_amount }}</p>
+                <strong>Final Amount : Rs. {{ final_price }} </strong>
+                <p></p>
+                
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      {% else %}
+      <h2 class="section-title heading-border ls-20 border-0">Your Cart Looks Empty !!</h2>
+      <div class ="row" style="align-items: center;">
+        <a href="{% url 'home' %}" class="btn btn-outline-primary">View Products</a>
+      </div>
+      {% endif %}
+    </div>
+
+
+
+    {% endblock %}
